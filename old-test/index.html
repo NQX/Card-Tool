@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+
+    <style>
+        body {
+            background-color: lightgray;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="capture" style=" display: block; width: 600px; height:auto;">
+
+        <div style="position: relative; height: 500px; background-image: url(1.png);">
+            <!-- <img id="image" src="1.png" width="200" style="position: absolute; text-align: center;" /> -->
+            <h1 id="heading" contenteditable="true"
+                style="position: absolute; color: black; font-size: 12px; margin-left: 50px; margin-top: 120px;">Hello
+                there</h1>
+        </div>
+    </div>
+
+
+
+    <div style="display: block;">
+        <button id="btn">Process</button>
+        <button id="btn2">Save</button>
+
+        <input type="file" id="file" />
+
+        <br>
+        <select id="image-select">
+            <option>Flowers</option>
+            <option>White</option>
+            <option>Wedding</option>
+        </select>
+
+        <br>
+        <label>left</label>
+        <input type="radio" value="left" name="align">
+        <br>
+        <label>center</label>
+        <input type="radio" value="center" name="align">
+        <br>
+        <label>right</label>
+        <input type="radio" value="right" name="align">
+
+        <br>
+        <img id="imgConverted" />
+
+
+
+        <label>Font size</label>
+        <input type="number" id="font-size" />
+
+        <br>
+
+        <label>Font</label>
+        <select id="font-select">
+            <option>Times New Roman</option>
+            <option>Verdana</option>
+            <option>Arial</option>
+        </select>
+    </div>
+
+
+
+
+
+
+
+
+    <svg xmlns="http://www.w3.org/2000/svg" width="224" height="120" style="grid-area: 1 / 1 / -1 / -1;">
+        <g>
+            <g>
+                <path mode="delta" fill="currentColor" cursor="n-resize" d="
+        m1,1
+        h223
+        l-36,24
+        h-151
+        l-36,-24z
+      " threshold="1" data-automation-id="margin-top-button" aria-label="Margin top button" delay="0"
+                    style="color: rgb(77, 77, 77); cursor: n-resize;"></path>
+            </g>
+        </g>
+        <g>
+            <g>
+                <path mode="delta" fill="currentColor" cursor="e-resize" d="
+        m223,1
+        v119
+        l-36,-24
+        v-71
+        l36,-24z
+      " threshold="1" data-automation-id="margin-right-button" aria-label="Margin right button" delay="0"
+                    style="color: rgb(85, 85, 85); cursor: e-resize;"></path>
+            </g>
+        </g>
+        <g>
+            <g>
+                <path mode="delta" fill="currentColor" cursor="s-resize" d="
+        m1,119
+        h223
+        l-36,-24
+        h-151
+        l-36,24z
+      " threshold="1" data-automation-id="margin-bottom-button" aria-label="Margin bottom button" delay="0"
+                    style="color: rgb(77, 77, 77); cursor: s-resize;"></path>
+            </g>
+        </g>
+        <g>
+            <g>
+                <path mode="delta" fill="currentColor" cursor="w-resize" d="
+        m1,1
+        v119
+        l36,-24
+        v-71
+        l-36,-24z
+      " threshold="1" data-automation-id="margin-left-button" aria-label="Margin left button" delay="0"
+                    style="color: rgb(85, 85, 85); cursor: w-resize;"></path>
+            </g>
+        </g>
+        <clipPath id="margin-outer">
+            <rect x="0" y="0" width="224" height="120" fill="transparent" rx="2" ry="2" style="pointer-events: none;">
+            </rect>
+        </clipPath>
+        <rect clip-path="url(#margin-outer)" x="0" y="0" width="224" height="120" fill="transparent" rx="2" ry="2"
+            style="pointer-events: none; stroke-width: 2px; stroke: rgb(51, 51, 51);"></rect>
+        <clipPath id="margin-inner">
+            <rect x="36" y="24" width="152" height="72" fill="transparent" rx="2" ry="2" style="pointer-events: none;">
+            </rect>
+        </clipPath>
+        <rect clip-path="url(#margin-inner)" x="36" y="24" width="152" height="72" fill="transparent" rx="2" ry="2"
+            style="pointer-events: none; stroke-width: 2px; stroke: rgb(51, 51, 51);"></rect>
+    </svg>
+
+
+    <img id="preview" />
+
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
+    </script>
+
+    <script src="html2canvas.min.js"></script>
+    <script src="canvas2image.js"></script>
+
+    <script>
+        $("#text").change(
+            function (e) {
+                $("#heading").text($("#text").val())
+                console.log()
+            }
+        )
+
+        let imgConverted = document.querySelector("#imgConverted")
+
+        $("#btn").click(
+            function (e) {
+                html2canvas(document.querySelector("#capture")).then(canvas => {
+                    document.body.appendChild(canvas)
+                    canvas.setAttribute("id", "export")
+                });
+            }
+
+
+        )
+
+        $("#btn2").click(
+            function (e) {
+
+                //Canvas2Image.saveAsPNG(document.getElementById("export"), 600, 300)                
+
+                const dataURI = document.querySelector("#export").toDataURL()
+                //console.log(dataURI)
+
+                imgConverted.src = dataURI
+
+                //IE  and Edge
+                if (window.navigator.msSaveBlob) {
+                    window.navigator.msSaveBlob(document.querySelector("#export").msToBlob(), "test.png")
+                } else {
+                    const a = document.createElement("a")
+                    document.body.appendChild(a)
+                    a.href = document.querySelector("#export").toDataURL()
+                    a.download = "test.png"
+                    a.click()
+                    document.body.remove(a)
+                }
+            }
+        )
+
+
+        $("#font-size").change(
+            function (e) {
+                console.log($("#heading").css('font-size'))
+                $("#heading").css("font-size", $(this).val() + "px")
+            }
+        )
+
+
+        $("#font-select").change(
+            function (e) {
+                switch ($(this).val()) {
+                    case 'Verdana':
+                        $('#heading').css('font-family', 'Verdana, Geneva, Tahoma, sans-serif')
+                        break;
+                    case 'Arial':
+                        $('#heading').css('font-family', 'Arial, Helvetica, sans-serif')
+                        break;
+                    case 'Times New Roman':
+                        $('#heading').css('font-family', "'Times New Roman', Times, serif")
+                        break;
+                }
+            }
+        )
+
+
+        $("#file").change(
+            function (e) {
+                readURL(this)
+            }
+        )
+
+        function readURL(input) {
+
+            if (input.files && input.files[0]) {
+                var reader = new FileReader()
+
+                reader.onload = function (e) {
+                    console.log(e)
+                    $("#preview").attr('src', e.target.result)
+                }
+                reader.readAsDataURL(input.files[0])
+            }
+        }
+
+
+        var img = document.querySelector("#image")
+        $("#image-select").change(
+            function (e) {
+                switch ($(this).val()) {
+                    case 'White':
+                        console.log(img.src)
+                        img.src = "1.png"
+                        break;
+                    case 'Flowers':
+                        console.log('flowers')
+                        img.src = "2.png"
+                        break;
+                    case 'Wedding':
+                        img.src = "3.png"
+                        break;
+                }
+            }
+        )
+    </script>
+</body>
+
+</html>
